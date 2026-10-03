@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace PracticalWork8_9
 {
@@ -6,35 +6,98 @@ namespace PracticalWork8_9
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=== Практическая работа №8-9. Вариант 6 ===");
+            Console.Title = "Практическая работа №8-9 — Вариант 6";
 
-            // Пример из 5 одномерных массивов
-            double[][] arrays = new double[5][]
+            while (true)
             {
-                new double[] { 1.5, 2.3, 4.0, 10.2 },      // Все положительные (№1)
-                new double[] { -3.2, -1.0, -5.5 },         // Все отрицательные (№2)
-                new double[] { 1.2, -2.5, 3.0 },           // Разные знаки (№3)
-                new double[] { -4.1, -2.0, 0, -1.1 },      // Содержит ноль (№4)
-                new double[] { 100.1, 0.5, 7.8, 9.9 }      // Все положительные (№5)
-            };
+                Console.Clear();
+                Console.WriteLine("==================================================");
+                Console.WriteLine("    Практическая работа №8-9. Вариант 6");
+                Console.WriteLine("    Разработка и интеграция модулей (Команда)");
+                Console.WriteLine("==================================================");
+                Console.WriteLine("1. Ввести 5 массивов вручную с клавиатуры");
+                Console.WriteLine("2. Сгенерировать 5 массивов случайными числами");
+                Console.WriteLine("3. Запустить контрольный пример (тестовые данные)");
+                Console.WriteLine("0. Выход из программы");
+                Console.WriteLine("==================================================");
 
-            Console.WriteLine("\nРезультаты проверки массивов:");
-            for (int i = 0; i < arrays.Length; i++)
-            {
-                bool sameSign = ArrayProcessor.IsSameSign(arrays[i]);
+                int choice = InputHelper.ReadInt("Выберите действие (0-3): ", 0, 3);
 
-                if (sameSign)
+                if (choice == 0)
                 {
-                    Console.WriteLine($"Массив №{i + 1}: Составляет последовательность одного знака.");
+                    Console.WriteLine("\nПрограмма завершена.");
+                    break;
                 }
-                else
+
+                double[][] arrays = new double[5][];
+
+                if (choice == 1)
                 {
-                    Console.WriteLine($"Массив №{i + 1}: Ответ отрицательный (элементы разных знаков или содержат 0).");
+                    Console.WriteLine("\n--- Ввод данных пользователем ---");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        arrays[i] = InputHelper.InputArrayManually(i + 1);
+                    }
                 }
+                else if (choice == 2)
+                {
+                    Console.WriteLine("\n--- Сгенерированные массивы ---");
+                    Random rnd = new Random();
+                    for (int i = 0; i < 5; i++)
+                    {
+                        arrays[i] = InputHelper.GenerateRandomArray(i + 1, rnd);
+                    }
+                }
+                else if (choice == 3)
+                {
+                    Console.WriteLine("\n--- Контрольный пример тестовых данных ---");
+                    arrays = new double[5][]
+                    {
+                        new double[] { 1.5, 2.3, 4.0, 10.2 },      // Все положительные (№1)
+                        new double[] { -3.2, -1.0, -5.5 },         // Все отрицательные (№2)
+                        new double[] { 1.2, -2.5, 3.0 },           // Разные знаки (№3)
+                        new double[] { -4.1, -2.0, 0, -1.1 },      // Содержит ноль (№4)
+                        new double[] { 100.1, 0.5, 7.8, 9.9 }      // Все положительные (№5)
+                    };
+                }
+
+                // Вывод исходных данных
+                Console.WriteLine("\n================ ИСХОДНЫЕ ДАННЫЕ ================");
+                for (int i = 0; i < arrays.Length; i++)
+                {
+                    Console.Write($"Массив №{i + 1} [{arrays[i].Length} эл.]: ");
+                    Console.WriteLine(string.Join(", ", arrays[i]));
+                }
+
+                // Вызов модуля логики (Студент 1) и вывод результатов
+                Console.WriteLine("\n================ РЕЗУЛЬТАТЫ ПРОВЕРКИ ============");
+                bool hasSameSign = false;
+
+                for (int i = 0; i < arrays.Length; i++)
+                {
+                    bool sameSign = ArrayProcessor.IsSameSign(arrays[i]);
+
+                    if (sameSign)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"[+] Массив №{i + 1}: Состоит из элементов ОДНОГО знака.");
+                        Console.ResetColor();
+                        hasSameSign = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[-] Массив №{i + 1}: Отрицательный ответ (знаки разные или присутствуют нули).");
+                    }
+                }
+
+                if (!hasSameSign)
+                {
+                    Console.WriteLine("\nРезультат: Ни один из массивов не удовлетворяет условию задачи.");
+                }
+
+                Console.WriteLine("\nНажмите любую клавишу для возврата в меню...");
+                Console.ReadKey();
             }
-
-            Console.WriteLine("\nНажмите любую клавишу для выхода...");
-            Console.ReadKey();
         }
     }
 }
